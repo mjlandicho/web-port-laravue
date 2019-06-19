@@ -8,21 +8,21 @@ use App\Portfolio;
 
 class PortfolioController extends Controller
 {
-  /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api');
-        // $this->authorize('isAdmin');
-    }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+//   /**
+//      * Create a new controller instance.
+//      *
+//      * @return void
+//      */
+//     public function __construct()
+//     {
+//         $this->middleware('auth:api');
+//         // $this->authorize('isAdmin');
+//     }
+//     /**
+//      * Display a listing of the resource.
+//      *
+//      * @return \Illuminate\Http\Response
+//      */
     public function index()
     {
         return Portfolio::latest()->paginate(10);
@@ -91,7 +91,9 @@ class PortfolioController extends Controller
      */
     public function show($id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+
+        return $portfolio;
     }
 
     /**
@@ -103,8 +105,38 @@ class PortfolioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+
+        $this->validate($request, [
+            'title' => 'required|string|max:191',
+            'f_image' => 'string',
+            'description' => 'required|string',
+            'project_info' => 'required|string',
+            'client' => 'required|string',
+            'website' => 'required|string',
+            'completed' => 'required|string',
+        ]);
+
+        $currentPhoto = $portfolio->f_image;
+
+        if($request->f_image != $currentPhoto){
+            $name = time().'.' . explode('/', explode(':', substr($request->f_image, 0, strpos($request->f_image, ';')))[1])[1];
+            // using intervention image
+            \Image::make($request->f_image)->save(public_path('img/featured_image/').$name);
+
+            $request->merge(['f_image' => $name]);
+
+            $featuredImage = public_path('img/featured_image/').$currentPhoto;
+            if(file_exists($featuredImage)){
+                @unlink($featuredImage);
+            }
+
+
+        }
+
+        $portfolio->update($request->all());
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -114,6 +146,11 @@ class PortfolioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $portfolio = Portfolio::findOrFail($id);
+
+
+        $portfolio->delete();
+
+        // return ['message' => 'deleted'];
     }
 }

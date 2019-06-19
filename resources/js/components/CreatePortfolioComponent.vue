@@ -1,9 +1,10 @@
+
 <template>
     <div class="container-fluid mt-5">
         <div class="card">
 
               <div class="card-header">
-                <h3 class="card-title">Add Porfolio</h3>
+                <h2 class="card-title m-0"><strong> Create Porfolio </strong></h2>
               </div>
 
                 <form @submit.prevent="addPortfolio" enctype="multipart/form-data" >
@@ -22,8 +23,8 @@
                         <div class="form-group">
                             <label>Description</label>
                             <textarea v-model="form.description" type="text" name="description" placeholder="Enter Description"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('title') }"> </textarea>
-                            <has-error :form="form" field="title"></has-error>
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
+                            <has-error :form="form" field="description"></has-error>
                         </div>
 
                         <div class="form-group">
@@ -32,8 +33,11 @@
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('project_info') }"> </textarea>
                             <has-error :form="form" field="project_info"></has-error>
                         </div>
-                        
-                        <div class="form-group">
+
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                          <div class="form-group">
                             <label>Client</label>
                             <input v-model="form.client" type="text" name="client" id="client" placeholder="Enter Client"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('client') }">
@@ -47,10 +51,6 @@
                             <has-error :form="form" field="website"></has-error>
                         </div>
 
-                        </div>
-
-                        <div class="col-12 col-md-3">
-
                             <div class="form-group">
                                 <label>Completed</label>
                                 <input v-model="form.completed" type="date" name="completed" id="completed" placeholder="Date Completed"
@@ -60,7 +60,7 @@
                             
                             <div class="form-group">
                                 <label for="inputPS">Featured Image</label>
-                                <input type="file" id="inputPS" placeholder="Profile Picture" @change="featuredImage">
+                                <input type="file" id="inputPS"  v-if="uploadReady"  placeholder="Profile Picture" @change="featuredImage">
                                  <img class="img-fluid mt-2" :src="getFeatureImage()">
                             </div>
                         </div>
@@ -73,8 +73,8 @@
                                         
                     <!-- card footer -->
                     <div class="card-footer">
-                         <button type="submit" class="btn btn-success float-right mx-2">Create</button>
-                         <router-link to="/portfolio" type="button" class="btn btn-danger float-right mx-2">Back</router-link>
+                         <button type="submit" class="btn btn-success float-right btn-lg mx-2"> <i class="fas fa-plus-circle"></i> Create</button>
+                         <router-link to="/portfolio" class="btn btn-danger float-right btn-lg mx-2"><i class="fas fa-arrow-left"></i> Back</router-link>
                     </div>
                 </form>
 
@@ -86,6 +86,7 @@
     export default {
         data(){
             return {
+                uploadReady: true,
                 form: new Form({
                     title: '',
                     f_image: '',
@@ -99,8 +100,7 @@
         },
         methods:{
             getFeatureImage(){
-              let f_image = (this.form.f_image.length > 200) ? this.form.f_image : "img/featured_image/" + this.form.f_image;
-              // return "img/profile/" + this.form.photo;
+              let f_image =  this.form.f_image              
               return f_image;
             },
             featuredImage(e){
@@ -114,11 +114,34 @@
                     }
                 reader.readAsDataURL(file);
                 }else{
-                    alert('error');
+                    Swal.fire({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Please choose lower than 2mb',
+                    })
                 }
             },
             addPortfolio(){
-                this.form.post('api/portfolio');
+                this.$Progress.start()
+                this.form.post('api/portfolio')
+                .then(() => {
+                    Fire.$emit('afterModify');
+                    toast.fire({
+                        type: 'success',
+                        title: 'Porfolio created successfully'
+                    })
+                    this.form.reset();
+                    this.uploadReady = false
+                    this.$nextTick(() => {
+        	        this.uploadReady = true
+                     })
+                    this.$Progress.finish()
+                    this.$router.push('Portfolio') 
+                })
+                .catch(() => {
+                    this.$Progress.fail()
+                })
+
             }
         },
         mounted() {

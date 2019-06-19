@@ -9,16 +9,26 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 
-// Vue Router
+
 import VueRouter from 'vue-router'
+import { Form, HasError, AlertError } from 'vform'
+import moment from 'moment';
+import VueProgressBar from 'vue-progressbar'
+import Swal from 'sweetalert2'
+import CKEditor from '@ckeditor/ckeditor5-vue';
+
+// Vue Router
 Vue.use(VueRouter)
-
-
-
 let routes = [
-    { path: '/dashboard', component: require('./components/Dashboard.vue').default },
-    { path: '/portfolio', component: require('./components/Portfolio.vue').default },
-    { path: '/modification', component: require('./components/Modification.vue').default },
+    { name:'dashboard', path: '/dashboard', component: require('./components/Dashboard.vue').default },
+    // portfolio
+    { name:'portfolio', path: '/portfolio', component: require('./components/Portfolio.vue').default },
+    { name:'create-portfolio', path: '/create-portfolio', component: require('./components/CreatePortfolioComponent.vue').default },
+    { name:'update-portfolio', path: '/update-portfolio/:id', component: require('./components/UpdatePortfolioComponent.vue').default },
+    // post blog
+    { name:'post', path: '/post', component: require('./components/Post.vue').default },
+    { name:'create-post', path: '/create-post', component: require('./components/CreatePostComponent.vue').default },
+    { name:'update-post', path: '/update-post/:id', component: require('./components/UpdatePostComponent.vue').default },
   ]
 
   const router = new VueRouter({
@@ -28,8 +38,6 @@ let routes = [
   
 
 // V- Form
-import { Form, HasError, AlertError } from 'vform'
-
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
@@ -39,6 +47,38 @@ Vue.component(AlertError.name, AlertError)
 Vue.filter('upText',function(text){
   return text.charAt(0).toUpperCase() + text.slice(1)
 });
+
+
+//moment js
+Vue.filter('date', function(created){
+  return moment(created).format('LL');;
+});
+
+//Progress Bar
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '5px'
+})
+
+
+// Sweet alert
+window.Swal = Swal;
+
+const toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000
+});
+
+window.toast = toast;
+
+//custom event in vue
+window.Fire = new Vue();
+
+//ck editor
+Vue.use( CKEditor );
 
 
 /**

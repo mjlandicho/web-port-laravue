@@ -74,7 +74,7 @@
                 <router-link to="/dashboard" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
-                        Dash Board
+                        Dashboard
                     </p>
                 </router-link>
             </li>
@@ -91,6 +91,14 @@
                 <router-link to="/portfolio" class="nav-link">
                     <i class="fas fa-briefcase"></i>
                   <p>Portfolio</p>
+                </router-link>
+              </li>
+            </ul>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/post" class="nav-link">
+                    <i class="fas fa-briefcase"></i>
+                  <p>Blog Posts</p>
                 </router-link>
               </li>
             </ul>
@@ -124,7 +132,7 @@
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-
+        <vue-progress-bar></vue-progress-bar>
           <!-- component matched by the route will render here -->
             <router-view></router-view>
 

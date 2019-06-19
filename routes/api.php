@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources(['portfolio' => 'API\PortfolioController']);
+
+Route::apiResources(['post' => 'API\PostController']);
