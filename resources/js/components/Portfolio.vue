@@ -36,9 +36,9 @@
                     <td>{{portfolio.website | upText}}</td>
                     <td>{{portfolio.completed | date}}</td>
                     <td class="text-center p-auto">
-                      <!-- <a href="#" class="btn btn-primary">
+                      <router-link href="#" class="btn btn-primary" :to="{name: 'view-portfolio', params: {id:portfolio.id}}" >
                         <i class="fas fa-eye"></i>
-                      </a> -->
+                      </router-link>
                     <router-link class="btn btn-success" :to="{name: 'update-portfolio', params: {id:portfolio.id}}">
                         <i class="fas fa-edit blue"></i>
                     </router-link>
@@ -97,7 +97,7 @@
           loadPortfolio(){
             axios.get('/api/portfolio').then(({data}) => (this.portfolios = data.data));
           }
-        },
+        },  
         created() {
             this.loadPortfolio();
             Fire.$on('afterModify', () => {

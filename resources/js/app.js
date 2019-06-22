@@ -25,6 +25,7 @@ let routes = [
     { name:'portfolio', path: '/portfolio', component: require('./components/Portfolio.vue').default },
     { name:'create-portfolio', path: '/create-portfolio', component: require('./components/CreatePortfolioComponent.vue').default },
     { name:'update-portfolio', path: '/update-portfolio/:id', component: require('./components/UpdatePortfolioComponent.vue').default },
+    { name:'view-portfolio', path: '/view-portfolio/:id', component: require('./components/ViewPortfolioComponent.vue').default },
     // post blog
     { name:'post', path: '/post', component: require('./components/Post.vue').default },
     { name:'create-post', path: '/create-post', component: require('./components/CreatePostComponent.vue').default },
