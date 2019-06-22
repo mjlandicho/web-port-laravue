@@ -21,17 +21,20 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea v-model="form.description" type="text" placeholder="Enter Description"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
-                            <has-error :form="form" field="description"></has-error>
-                        </div>
-
-                        <div class="form-group">
                             <label>Project Info</label>
                             <textarea v-model="form.project_info" type="text" placeholder="Enter Project Info"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('project_info') }"> </textarea>
                             <has-error :form="form" field="project_info"></has-error>
+                        </div>
+
+                        <div id="app" class="form-group">
+                            <label>Description</label>
+                                <ckeditor :editor="editor" tag-name="textarea" rows="10" v-model="form.description" name="description" :class="{ 'is-invalid': form.errors.has('description') }" ></ckeditor>
+                                <has-error :form="form" field="description"></has-error>
+                            <!-- <label>Description</label>
+                            <textarea v-model="form.description" type="text" placeholder="Enter Description"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
+                            <has-error :form="form" field="description"></has-error> -->
                         </div>
 
                         </div>
@@ -58,14 +61,10 @@
                                 <has-error :form="form" field="completed"></has-error>
                             </div>
 
-
-                            <input v-model="form.f_image" type="text" placeholder="Image"
-                                    class="form-control">
-                            
                             <div class="form-group">
                                 <label for="inputPS">Featured Image</label>
                                 <input type="file" id="inputPS" placeholder="Profile Picture" @change="featuredImage">
-                                 <img class="img-fluid mt-2" :src="getFeatureImage()">
+                                 <img style="max-height:200px;" class="img-fluid mt-2" :src="getFeatureImage()">
                             </div>
                         </div>
                     </div>
@@ -74,8 +73,8 @@
                                         
                     <!-- card footer -->
                     <div class="card-footer">
-                         <button @click.prevent="UpdatePortfolio" type="submit" class="btn btn-primary float-right mx-2">Update</button>
-                         <router-link to="/portfolio" type="button" class="btn btn-danger float-right mx-2">Back</router-link>
+                         <button @click.prevent="UpdatePortfolio" type="submit" class="btn btn-primary float-right btn-lg mx-2"><i class="fas fa-save"></i> Update</button>
+                         <router-link to="/portfolio" class="btn btn-danger float-right btn-lg mx-2"><i class="fas fa-arrow-left"></i> Cancel</router-link>
                     </div>
                     
                 </form>
@@ -85,9 +84,16 @@
 </template>
 
 <script>
+ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
     export default {
+        name: 'app',
         data(){
             return {
+                 editor: ClassicEditor,
+                // editorData: '<p>Rich-text editor content.</p>',
+                editorConfig: {
+                    // The configuration of the rich-text editor.
+                },
                 form: new Form({
                     id: '',
                     title: '',
@@ -102,8 +108,8 @@
         },
         methods:{
             getFeatureImage(){
-            let f_image = (this.form.f_image.length > 200) ? this.form.f_image : "img/featured-image/" + this.form.f_image;
-              return f_image;
+            let f_image = (this.form.f_image.length > 200) ? this.form.f_image : "/img/featured_image/" + this.form.f_image;
+            return f_image;
             },
             UpdatePortfolio(){
                 this.$Progress.start();
@@ -116,6 +122,7 @@
                   'success'
                 )
                 this.$Progress.finish();
+                this.$router.push('/portfolio');
                 })
                 .catch(() => {
                 this.$Progress.fail();

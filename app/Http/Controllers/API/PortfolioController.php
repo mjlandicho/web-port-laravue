@@ -148,7 +148,10 @@ class PortfolioController extends Controller
     {
         $portfolio = Portfolio::findOrFail($id);
 
+        $image_path = public_path('img/featured_image/').$portfolio->f_image; 
 
+        unlink($image_path);
+        
         $portfolio->delete();
 
         // return ['message' => 'deleted'];

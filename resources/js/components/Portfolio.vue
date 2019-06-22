@@ -18,7 +18,7 @@
                     <th>Title</th>
                     <th>Featured Image</th>
                     <th>Description</th>
-                    <th>Project Info</th>
+                    <th>Project Info</th> 
                     <th>Client</th>
                     <th>Website</th>
                     <th>Completed</th>
@@ -30,7 +30,7 @@
                     <td>{{portfolio.id}}</td>
                     <td>{{portfolio.title}}</td>
                     <td><img class="img-fluid" style="max-height:50px" v-bind:src="'/img/featured_image/' + portfolio.f_image" alt=""></td>
-                    <td>{{portfolio.description}}</td>
+                    <td>{{portfolio.description | truncate}}</td>
                     <td>{{portfolio.project_info}}</td>
                     <td>{{portfolio.client}}</td>
                     <td>{{portfolio.website | upText}}</td>
@@ -104,5 +104,6 @@
               this.loadPortfolio();
             })
         }
-    }
+      }
+
 </script>

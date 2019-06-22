@@ -16485,3 +16485,7 @@ readers do not read off random characters that represent icons */
   color: #333 !important;
 }
 
+.ck-content {
+  height: 500px;
+}
+

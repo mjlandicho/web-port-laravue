@@ -12,7 +12,6 @@
 
                     <div class="row">
                         <div class="col-12 col-md-9">
-
                              <div class="form-group">
                             <label>Title</label>
                             <input v-model="form.title" type="text" name="title" id="title" placeholder="Enter Title"
@@ -21,17 +20,19 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea v-model="form.description" type="text" name="description" placeholder="Enter Description"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
-                            <has-error :form="form" field="description"></has-error>
-                        </div>
-
-                        <div class="form-group">
                             <label>Project Info</label>
                             <textarea v-model="form.project_info" type="text" name="project_info" placeholder="Enter Project Info"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('project_info') }"> </textarea>
                             <has-error :form="form" field="project_info"></has-error>
+                        </div>
+
+                        <div id="app" class="form-group">
+                            <label>Description</label>
+                                <ckeditor :editor="editor" tag-name="textarea" rows="10" v-model="form.description" name="description" :class="{ 'is-invalid': form.errors.has('description') }" ></ckeditor>
+                                <has-error :form="form" field="description"></has-error>
+                            <!-- <textarea :editor="editor" v-model="form.description" type="text" name="description" placeholder="Enter Description"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
+                            <has-error :form="form" field="description"></has-error> -->
                         </div>
 
                         </div>
@@ -83,9 +84,17 @@
 </template>
 
 <script>
+ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
     export default {
+        name: 'app',
         data(){
             return {
+                editor: ClassicEditor,
+                // editorData: '<p>Rich-text editor content.</p>',
+                editorConfig: {
+                    // The configuration of the rich-text editor.
+                },
                 uploadReady: true,
                 form: new Form({
                     title: '',
@@ -136,7 +145,7 @@
         	        this.uploadReady = true
                      })
                     this.$Progress.finish()
-                    this.$router.push('Portfolio') 
+                    this.$router.push('/portfolio') 
                 })
                 .catch(() => {
                     this.$Progress.fail()
