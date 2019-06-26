@@ -26,8 +26,49 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = Post::create($request->all());
-        return $post;
+        // $post = Post::create($request->all());
+        // return $post;
+
+        $post = new Post;
+
+        $this->validate($request, [
+            'title' => 'required|string|max:191',
+            'image' => 'string',
+            'body' => 'required|string',
+        ]);
+
+        $currentPhoto = $post->image;
+
+        if($request->image != $currentPhoto){
+            $name = time().'.' . explode('/', explode(':', substr($request->image, 0, strpos($request->image, ';')))[1])[1];
+            // using intervention image
+            \Image::make($request->image)->save(public_path('img/featured_image/blog/').$name);
+
+            $request->merge(['image' => $name]);
+
+            $featuredImage = public_path('img/featured_image/blog/').$currentPhoto;
+            if(file_exists($featuredImage)){
+                @unlink($featuredImage);
+            }
+
+
+        }
+
+        $post->create($request->all());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**

@@ -28,7 +28,7 @@
 
                         <div id="app" class="form-group">
                             <label>Description</label>
-                                <ckeditor :editor="editor" tag-name="textarea" rows="10" v-model="form.description" name="description" :class="{ 'is-invalid': form.errors.has('description') }" ></ckeditor>
+                                <ckeditor :editor="editor" tag-name="textarea" rows="10" v-model="form.description" id="editor" name="description" :class="{ 'is-invalid': form.errors.has('description') }" ></ckeditor>
                                 <has-error :form="form" field="description"></has-error>
                             <!-- <textarea :editor="editor" v-model="form.description" type="text" name="description" placeholder="Enter Description"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('description') }"> </textarea>
@@ -94,6 +94,7 @@
                 // editorData: '<p>Rich-text editor content.</p>',
                 editorConfig: {
                     // The configuration of the rich-text editor.
+                    
                 },
                 uploadReady: true,
                 form: new Form({

@@ -2065,6 +2065,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @ckeditor/ckeditor5-build-classic */ "./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js");
+/* harmony import */ var _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -2114,13 +2116,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
+  name: 'app',
   data: function data() {
     return {
+      editor: _ckeditor_ckeditor5_build_classic__WEBPACK_IMPORTED_MODULE_0___default.a,
+      // editorData: '<p>Rich-text editor content.</p>',
+      editorConfig: {// The configuration of the rich-text editor.
+      },
       uploadReady: true,
       form: new Form({
         title: '',
@@ -2130,30 +2134,34 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    // getFeatureImage(){
-    //   let f_image =  this.form.f_image              
-    //   return f_image;
-    // },
-    // featuredImage(e){
-    //     let file = e.target.files[0];
-    //     console.log(file)
-    //     let reader = new FileReader();
-    //     if(file ['size'] < 2111775){
-    //         reader.onloadend = (file) => {
-    //         // console.log('RESULT', reader.result)
-    //         this.form.f_image = reader.result;
-    //         }
-    //     reader.readAsDataURL(file);
-    //     }else{
-    //         Swal.fire({
-    //         type: 'error',
-    //         title: 'Oops...',
-    //         text: 'Please choose lower than 2mb',
-    //         })
-    //     }
-    // },
-    addPortfolio: function addPortfolio() {
+    getFeatureImage: function getFeatureImage() {
+      var image = this.form.image;
+      return image;
+    },
+    featuredImage: function featuredImage(e) {
       var _this = this;
+
+      var file = e.target.files[0];
+      console.log(file);
+      var reader = new FileReader();
+
+      if (file['size'] < 2111775) {
+        reader.onloadend = function (file) {
+          // console.log('RESULT', reader.result)
+          _this.form.image = reader.result;
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        Swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'Please choose lower than 2mb'
+        });
+      }
+    },
+    addPortfolio: function addPortfolio() {
+      var _this2 = this;
 
       this.$Progress.start();
       this.form.post('api/post').then(function () {
@@ -2163,15 +2171,17 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Post created successfully'
         });
 
-        _this.form.reset(); // this.uploadReady = false
-        // this.$nextTick(() => {
-        // this.uploadReady = true
-        //  })
+        _this2.form.reset();
 
+        _this2.uploadReady = false;
 
-        _this.$Progress.finish();
+        _this2.$nextTick(function () {
+          _this2.uploadReady = true;
+        });
+
+        _this2.$Progress.finish();
       })["catch"](function () {
-        _this.$Progress.fail();
+        _this2.$Progress.fail();
       });
     }
   },
@@ -2342,7 +2352,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -59626,6 +59635,7 @@ var render = function() {
                         editor: _vm.editor,
                         "tag-name": "textarea",
                         rows: "10",
+                        id: "editor",
                         name: "description"
                       },
                       model: {
@@ -59880,7 +59890,7 @@ var render = function() {
         [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-12 col-md-12" }, [
+              _c("div", { staticClass: "col-12 col-md-9" }, [
                 _c(
                   "div",
                   { staticClass: "form-group" },
@@ -59924,75 +59934,23 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "div",
-                  { staticClass: "form-group" },
-                  [
-                    _c("label", [_vm._v("Image")]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.image,
-                          expression: "form.image"
-                        }
-                      ],
-                      staticClass: "form-control",
-                      class: { "is-invalid": _vm.form.errors.has("image") },
-                      attrs: {
-                        type: "text",
-                        name: "image",
-                        id: "image",
-                        placeholder: "Enter Image"
-                      },
-                      domProps: { value: _vm.form.image },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "image", $event.target.value)
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _c("has-error", {
-                      attrs: { form: _vm.form, field: "image" }
-                    })
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  { staticClass: "form-group" },
+                  { staticClass: "form-group", attrs: { id: "app" } },
                   [
                     _c("label", [_vm._v("Body")]),
                     _vm._v(" "),
-                    _c("textarea", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.form.body,
-                          expression: "form.body"
-                        }
-                      ],
-                      staticClass: "form-control",
+                    _c("ckeditor", {
                       class: { "is-invalid": _vm.form.errors.has("body") },
                       attrs: {
-                        type: "body",
-                        name: "body",
-                        placeholder: "Enter Description"
+                        editor: _vm.editor,
+                        "tag-name": "textarea",
+                        name: "body"
                       },
-                      domProps: { value: _vm.form.body },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(_vm.form, "body", $event.target.value)
-                        }
+                      model: {
+                        value: _vm.form.body,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "body", $$v)
+                        },
+                        expression: "form.body"
                       }
                     }),
                     _vm._v(" "),
@@ -60002,6 +59960,30 @@ var render = function() {
                   ],
                   1
                 )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-12 col-md-3" }, [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "inputPS" } }, [
+                    _vm._v("Featured Image")
+                  ]),
+                  _vm._v(" "),
+                  _vm.uploadReady
+                    ? _c("input", {
+                        attrs: {
+                          type: "file",
+                          id: "inputPS",
+                          placeholder: "Profile Picture"
+                        },
+                        on: { change: _vm.featuredImage }
+                      })
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("img", {
+                    staticClass: "img-fluid mt-2",
+                    attrs: { src: _vm.getFeatureImage() }
+                  })
+                ])
               ])
             ])
           ]),
@@ -60023,7 +60005,7 @@ var render = function() {
                 "router-link",
                 {
                   staticClass: "btn btn-danger float-right mx-2",
-                  attrs: { to: "/post", type: "button" }
+                  attrs: { to: "/post" }
                 },
                 [_vm._v("Back")]
               )
@@ -60320,7 +60302,16 @@ var render = function() {
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(post.title))]),
                 _vm._v(" "),
-                _c("td", [_vm._v(_vm._s(post.image))]),
+                _c("td", [
+                  _c("img", {
+                    staticClass: "img-fluid",
+                    staticStyle: { "max-height": "50px" },
+                    attrs: {
+                      src: "/img/featured_image/blog/" + post.image,
+                      alt: ""
+                    }
+                  })
+                ]),
                 _vm._v(" "),
                 _c("td", [_vm._v(_vm._s(post.body))]),
                 _vm._v(" "),
@@ -60941,43 +60932,35 @@ var render = function() {
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "offset-xl-1 col-xl-10" }, [
             _c("div", { staticClass: "portfolio_details_inner" }, [
-              _c("div", { staticClass: "row" }, [
-                _c(
-                  "div",
-                  { staticClass: "col-12" },
-                  [
-                    _c("H1", [_vm._v(_vm._s(_vm.data.title))]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "left_img" }, [
-                      _c("img", {
-                        staticClass: "img-fluid",
-                        attrs: {
-                          src: "/img/featured_image/" + _vm.data.f_image,
-                          alt: ""
-                        }
-                      })
-                    ])
-                  ],
-                  1
-                )
+              _c("div", { staticClass: "row my-5" }, [
+                _c("div", { staticClass: "col-12" }, [
+                  _c("h1", { staticClass: "mb-3" }, [
+                    _vm._v(_vm._s(_vm.data.title))
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "left_img" }, [
+                    _c("img", {
+                      staticClass: "img-fluid",
+                      attrs: {
+                        src: "/img/featured_image/" + _vm.data.f_image,
+                        alt: ""
+                      }
+                    })
+                  ])
+                ])
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "row" }, [
+              _c("div", { staticClass: "row mb-5" }, [
                 _c("div", { staticClass: "col-lg-7 mb-4 mb-lg-0" }, [
-                  _c("div", { staticClass: "description" }, [
-                    _vm._v(
-                      "\n                      " +
-                        _vm._s(_vm.data.description) +
-                        "\n                  "
-                    )
-                  ])
+                  _c("div", {
+                    staticClass: "description",
+                    domProps: { innerHTML: _vm._s(_vm.data.description) }
+                  })
                 ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "col-lg-5" }, [
                   _c("div", { staticClass: "portfolio_right_text mt-30" }, [
-                    _c("h4", { staticClass: "text-uppercase" }, [
-                      _vm._v("Project Info")
-                    ]),
+                    _vm._m(0),
                     _vm._v(" "),
                     _c("p", [
                       _vm._v(
@@ -60987,7 +60970,7 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("ul", { staticClass: "list" }, [
+                    _c("ul", { staticClass: "list-unstyled" }, [
                       _c("li", [
                         _c("span", [_vm._v("Client")]),
                         _vm._v(": " + _vm._s(_vm.data.client))
@@ -61013,7 +60996,16 @@ var render = function() {
     ]
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", { staticClass: "text-uppercase" }, [
+      _c("strong", [_vm._v("Project Info")])
+    ])
+  }
+]
 render._withStripped = true
 
 

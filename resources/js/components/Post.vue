@@ -25,8 +25,7 @@
                   <tr v-for="post in posts" :key="post.id" >
                     <td>{{post.id}}</td>
                     <td>{{post.title}}</td>
-                    <!-- <td><img class="img-fluid" style="max-height:50px" v-bind:src="'/img/featured_image/' + portfolio.f_image" alt=""></td> -->
-                    <td>{{post.image}}</td>
+                    <td><img class="img-fluid" style="max-height:50px" v-bind:src="'/img/featured_image/blog/' + post.image" alt=""></td>
                     <td>{{post.body}}</td>
                     <td class="text-center p-auto">
                       <a href="#" class="btn btn-primary">
